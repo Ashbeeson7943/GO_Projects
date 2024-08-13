@@ -4,7 +4,6 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
 	"github.com/Ashbeeson7943/GO_Projects/todoApp_cli/task"
 
 	"github.com/spf13/cobra"
@@ -13,7 +12,7 @@ import (
 // viewTaskCmd represents the viewTask command
 var viewTaskCmd = &cobra.Command{
 	Use:   "viewTask",
-	Short: "A brief description of your command",
+	Short: "View a single task on your list",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
@@ -21,8 +20,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("viewTask called")
-		task.GetTask(args)
+		task.ViewTask(args)
 	},
 }
 

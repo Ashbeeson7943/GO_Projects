@@ -1,7 +1,7 @@
 # TODO CLI APPLICATION
 
 ## Summary
-
+replace csv with sqlLite
 ## Commands
 
 ### AddTask

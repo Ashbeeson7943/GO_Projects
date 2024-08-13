@@ -39,7 +39,7 @@ func init() {
 func addTask(ts []string) {
 	s := strings.Join(ts[:], " ")
 	t := task.Task{
-		ID:               0,
+		ID:               task.GetNextTaskID(),
 		TASK_TITLE:       s,
 		TASK_DETAIL:      "",
 		CREATED_TIME:     time.Now(),
