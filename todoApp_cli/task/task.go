@@ -189,3 +189,11 @@ func LoadTasks() {
 		headers = false
 	}
 }
+
+func FileCheck() {
+	_, err := os.Stat("tasks.csv")
+	if os.IsNotExist(err) {
+		os.Create("tasks.csv")
+		saveTasks([]Task{})
+	}
+}

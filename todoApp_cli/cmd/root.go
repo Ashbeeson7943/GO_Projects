@@ -4,6 +4,7 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"github.com/Ashbeeson7943/GO_Projects/todoApp_cli/task"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -27,6 +28,7 @@ to quickly create a Cobra application.`,
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
+	task.FileCheck()
 	err := rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)
