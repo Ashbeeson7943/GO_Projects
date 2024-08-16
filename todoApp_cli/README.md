@@ -1,5 +1,5 @@
 # TODO CLI APPLICATION
-
+https://www.codeproject.com/Articles/5261771/Golang-SQLite-Simple-Example
 ## Summary
 replace csv with sqlLite
 ## Commands

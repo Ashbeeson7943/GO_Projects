@@ -3,6 +3,7 @@ package task
 import (
 	"encoding/csv"
 	"fmt"
+	"github.com/mergestat/timediff"
 	"log"
 	"os"
 	"strconv"
@@ -66,19 +67,34 @@ func ViewTask(id []string) {
 	displayTasks(getTask(ID), false)
 }
 
+func (t *Task) convertToDisplay() []string {
+	var csvRow []string
+	id := strconv.Itoa(t.ID)
+	ct := timediff.TimeDiff(time.Now(), timediff.WithStartTime(t.CREATED_TIME))
+	if t.IS_COMPLETED {
+		comt := t.COMPLETED_TIME.String()
+		ic := strconv.FormatBool(t.IS_COMPLETED)
+		csvRow = []string{id, t.TASK_TITLE, t.TASK_DETAIL, ct, ic, t.COMPLETED_REASON, comt}
+	} else {
+		csvRow = []string{id, t.TASK_TITLE, t.TASK_DETAIL, ct}
+	}
+	return csvRow
+	return nil
+}
+
 func displayTasks(tasks []Task, allTasks bool) {
 	var formattedTasks []string
 	for _, task := range tasks {
 		var splitTask []string
 		if !task.IS_COMPLETED {
-			splitTask = task.convertToCSVRow()
+			splitTask = task.convertToDisplay()
 			var out = ""
 			for _, i := range splitTask {
 				out += strings.Trim(i, ",") + "\t\t\t\t\t\t\t\t\t\t\t\t"
 			}
 			formattedTasks = append(formattedTasks, out)
 		} else if allTasks {
-			splitTask = task.convertToCSVRow()
+			splitTask = task.convertToDisplay()
 			var out = ""
 			for _, i := range splitTask {
 				out += strings.Trim(i, ",") + "\t\t\t\t\t\t\t\t\t\t\t\t"
@@ -125,9 +141,9 @@ func CompleteTask(args []string) {
 func (t *Task) convertToCSVRow() []string {
 	var csvRow []string
 	id := strconv.Itoa(t.ID)
-	ct := t.CREATED_TIME.String()
+	ct := t.CREATED_TIME.Format("2006-01-02 15:04:05")
 	if t.IS_COMPLETED {
-		comt := t.COMPLETED_TIME.String()
+		comt := t.COMPLETED_TIME.Format("2006-01-02 15:04:05")
 		ic := strconv.FormatBool(t.IS_COMPLETED)
 		csvRow = []string{id, t.TASK_TITLE, t.TASK_DETAIL, ct, ic, t.COMPLETED_REASON, comt}
 	} else {

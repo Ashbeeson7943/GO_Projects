@@ -4,7 +4,6 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
 	"github.com/Ashbeeson7943/GO_Projects/todoApp_cli/task"
 	"strings"
 	"time"
@@ -48,5 +47,4 @@ func addTask(ts []string) {
 		COMPLETED_TIME:   time.Time{},
 	}
 	task.SaveTask(t)
-	fmt.Printf("%+v", t)
 }
