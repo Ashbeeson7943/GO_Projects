@@ -46,3 +46,9 @@
         Cryptography fundamentals and blockchain concepts
         Peer-to-peer networking and decentralized consensus mechanisms
         Smart contract development and decentralized application (dApp) deployment
+
+
+
+
+
+$ curl -d '{"num1":2, "num2":3}' http://localhost:8080/add/
