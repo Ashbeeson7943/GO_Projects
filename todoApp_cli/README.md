@@ -1,7 +1,6 @@
 # TODO CLI APPLICATION
 https://www.codeproject.com/Articles/5261771/Golang-SQLite-Simple-Example
 ## Summary
-replace csv with sqlLite
 ## Commands
 
 ### AddTask
@@ -39,3 +38,8 @@ Task Outline:
 - viewTasks
 - viewTask
 - completeTask
+
+## ToDo
+- Change the IsComplete property of the Task data model to use a timestamp instead, which gives further information.
+- Change from CSV to JSON, JSONL or SQLite
+- Add in an optional due date to the tasks
