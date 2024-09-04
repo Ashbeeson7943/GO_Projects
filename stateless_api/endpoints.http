@@ -1,0 +1,52 @@
+# curl -d '{"num1":1,"num2":2}' -X POST http://localhost:8080/divide
+POST http://localhost:8080/divide/
+Content-Type: application/x-www-form-urlencoded
+
+{"num1":1,"num2":2}
+###
+POST http://localhost:8080/multiply/
+Content-Type: application/x-www-form-urlencoded
+
+{"num1":1,"num2":2}
+###
+POST http://localhost:8080/add/
+Content-Type: application/x-www-form-urlencoded
+
+{"num1":1,"num2":2}
+
+<> 2024-08-16T155349.200.txt
+<> 2024-08-16T155235.200.txt
+<> 2024-08-16T155148.200.txt
+<> 2024-08-16T155119.200.txt
+
+###
+POST http://localhost:8080/subtract/
+Content-Type: application/x-www-form-urlencoded
+
+{"num1":1,"num2":2}
+
+<> 2024-09-04T151225.401.txt
+<> 2024-09-04T150212.401.txt
+<> 2024-08-16T154131.200.txt
+###
+
+# curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjU0NjE5MjgsInVzZXJfaWQiOjB9.VX3XB9CQ06CG0dK5R7V3Rkh_Yl2gjTjQgFQXArq6oYg" -d '{"num1":2, "num2":3}' http://localhost:8080/multiply/
+POST http://localhost:8080/multiply/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjU0NjE5MjgsInVzZXJfaWQiOjB9.VX3XB9CQ06CG0dK5R7V3Rkh_Yl2gjTjQgFQXArq6oYg
+Content-Type: application/x-www-form-urlencoded
+
+{"num1":2, "num2":3}
+
+<> 2024-09-04T151227.200.txt
+<> 2024-09-04T151212.200.txt
+
+###
+# curl -d '{"username":"user","password":"password"}' http://localhost:8080/login
+POST http://localhost:8080/login
+Content-Type: application/x-www-form-urlencoded
+
+{"username":"user","password":"password"}
+
+<> 2024-09-04T151247.401.txt
+
+###

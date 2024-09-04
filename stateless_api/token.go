@@ -6,20 +6,20 @@ import (
 	"time"
 )
 
-var secretKey = []byte("secretpassword")
+var secretKey = []byte("secret-password")
 
 // Todo: Add time value to generate token for
-func GenerateJWTToken(userID uint) (string, error) {
+func GenerateJWTToken(userID int) (string, error) {
 	claims := jwt.MapClaims{}
 	claims["user_id"] = userID
 	claims["exp"] = time.Now().Add(time.Hour * 1).Unix() // Token valid for 1 hour
-	token := jwt.NewWithClaims(jwt.SigningMethodRS512, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(secretKey)
 }
 
 func VerifyJWTToken(tokenString string) (jwt.MapClaims, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("invalid signing method")
 		}
 		return secretKey, nil

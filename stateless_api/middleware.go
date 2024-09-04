@@ -21,13 +21,14 @@ func AuthenticationCheck(next http.Handler) http.Handler {
 			return
 		}
 		authToken = authTokenParts[1]
-		claims, err := VerifyJWTToken(authToken)
+		_, err := VerifyJWTToken(authToken)
 		if err != nil {
 			w.WriteHeader(http.StatusUnauthorized)
 			fmt.Fprintf(w, "{error: Invalid authentication token}")
 			return
 		}
-		r.Header.Set("user_id", claims["user_id"].(string))
+		//Not needed atm - errors when used
+		//r.Header.Set("user_id", claims["user_id"].(string))
 		next.ServeHTTP(w, r)
 	})
 }
