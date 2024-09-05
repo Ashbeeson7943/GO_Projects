@@ -1,12 +1,10 @@
 package main
 
 import (
-	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
-	"os"
-	"strconv"
 )
 
 func Login(w http.ResponseWriter, req *http.Request) {
@@ -21,8 +19,6 @@ func Login(w http.ResponseWriter, req *http.Request) {
 			fmt.Fprintf(w, "{error: Error generating authentication token, msg:%v}", err)
 			return
 		}
-		//For Web
-		w.Header().Set("token", token)
 		//For API
 		fmt.Fprintf(w, "{token:%v}", token)
 	} else {
@@ -32,7 +28,6 @@ func Login(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// Function for registering a new user (for demonstration purposes)
 func Register(w http.ResponseWriter, req *http.Request) {
 	var user User
 	err := json.NewDecoder(req.Body).Decode(&user)
@@ -42,22 +37,12 @@ func Register(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// Remember to securely hash passwords before storing them
-	user.ID = 1 // Just for demonstration purposes
-	//Write user to file
-	writeFile("users.csv", []string{user.Username, user.Password, strconv.Itoa(user.ID)})
+	// Todo: Hash password, generate user-Id
+	// Write user to DB
+	_, err = DB.Exec(InsertUser(user.Username, user.Password))
+	if err != nil {
+		log.Fatal(err)
+	}
 	w.WriteHeader(http.StatusCreated)
 	fmt.Fprintf(w, "{user: %#v}", user)
-}
-
-func writeFile(filename string, user []string) {
-	file, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-	writer := csv.NewWriter(file)
-	defer writer.Flush()
-	data := user
-	writer.Write(data)
 }

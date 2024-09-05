@@ -27,8 +27,6 @@ func AuthenticationCheck(next http.Handler) http.Handler {
 			fmt.Fprintf(w, "{error: Invalid authentication token}")
 			return
 		}
-		//Not needed atm - errors when used
-		//r.Header.Set("user_id", claims["user_id"].(string))
 		next.ServeHTTP(w, r)
 	})
 }

@@ -2,15 +2,17 @@ package main
 
 import (
 	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
 	"log"
+	_ "modernc.org/sqlite"
 	"net/http"
 	"os"
 )
 
 var mux *http.ServeMux
+var DB *sql.DB
 
 func main() {
+	sqllite()
 	mux = http.NewServeMux()
 	addFunc := http.HandlerFunc(Add)
 	subtractFunc := http.HandlerFunc(Subtract)
@@ -34,11 +36,18 @@ func main() {
 
 func sqllite() {
 	log.Println("Creating sqlite-database.db...")
-	file, err := os.Create("sqlite-database.db") // Create SQLite file
+	file, err := os.Create("sqlite-database.db") // Create SQLite file, deletes old one
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 	file.Close()
 	log.Println("sqlite-database.db created")
-	db, err := sql.Open("sqlite3", "sqlite-database.db")
+	db, err := sql.Open("sqlite", "sqlite-database.db")
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	DB = db
+	if _, err := db.Exec(CreateUserTable); err != nil {
+		log.Fatal(err.Error())
+	}
 }
