@@ -52,6 +52,18 @@ func Register(w http.ResponseWriter, req *http.Request) {
 	}
 	w.WriteHeader(http.StatusCreated)
 	fmt.Fprintf(w, "{user: %#v}", requested_user)
+	db_user, err := GetUserFromDB(requested_user.Username)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		fmt.Fprintf(w, "{error: username not found, msg:%v}", err)
+		return
+	}
+	_, err = DB.Exec(InsertKeyLimit(db_user.ID, 10))
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "{error: key rate not created, msg:%v}", err)
+		return
+	}
 }
 
 func GetUserFromDB(username string) (User, error) {

@@ -1,9 +1,11 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -46,19 +48,20 @@ func AuthenticationCheck(next http.Handler) http.Handler {
 
 func RateLimitCheck(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		// var requested_user User
-		// json.NewDecoder(req.Body).Decode(&requested_user) // Removes all data from req
-		// row := DB.QueryRow(GetKeyLimit(requested_user.Username))
-		// var keyLimit KeyLimit
-		// var err error
-		// if err = row.Scan(&keyLimit.Last_use, &keyLimit.Wait_time); err == sql.ErrNoRows {
-		// 	w.WriteHeader(http.StatusNotFound)
-		// 	fmt.Fprintf(w, "{error: Error getting token limits, msg:%v}", err)
-		// 	return
-		// }
-
 		//Todo: Update this with the query for getting rate limits. Will need to re-write the query
-		log.Println(req.Header.Get("user_id"))
+		h_user_id := req.Header.Get("user_id")
+		user_id, err := strconv.Atoi(h_user_id)
+		if err != nil {
+			log.Fatal(err)
+		}
+		row := DB.QueryRow(GetKeyLimit(user_id))
+		var keyLimit KeyLimit //Fix: Mapping values back from query isn't mapping?
+		if err = row.Scan(&keyLimit.Last_use, &keyLimit.Wait_time); err == sql.ErrNoRows {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintf(w, "{error: Error getting token limits, msg:%v}", err)
+			return
+		}
+		log.Println(keyLimit)
 		//Key rate limit logic
 		log.Println("Rate Check..")
 		next.ServeHTTP(w, req)

@@ -48,13 +48,28 @@ func sqllite() {
 		log.Fatal(err.Error())
 	}
 	DB = db
+	log.Println("Create User Table")
 	if _, err := db.Exec(CreateUserTable); err != nil {
 		log.Fatal(err.Error())
 	}
+	log.Println("Create key limit Table")
+	if _, err := db.Exec(CreateKeyLimitTable); err != nil {
+		log.Fatal(err.Error())
+	}
+	seedDB()
+}
+
+func seedDB() {
 	log.Println("Adding test users...")
-	_, err = db.Exec(InsertTestUsers)
+	_, err := DB.Exec(InsertTestUsers)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 	log.Println("Test users added")
+	log.Println("Adding test keylimits...")
+	_, err = DB.Exec(InsertTestKeyLimits)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	log.Println("Test keyLimits added")
 }

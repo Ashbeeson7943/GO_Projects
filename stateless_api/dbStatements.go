@@ -22,14 +22,21 @@ func GetUser(username string) string {
 
 const CreateKeyLimitTable = `CREATE TABLE IF NOT EXISTS keyLimits (
   id INTEGER NOT NULL PRIMARY KEY,
-  FOREIGN KEY(user_id) REFERENCES users(id),
+  user_id INTEGER,
   last_use TEXT,
-  wait_time INTEGER);`
+  wait_time INTEGER,
+  FOREIGN KEY (user_id) REFERENCES users(id));`
+
+var InsertTestKeyLimits = fmt.Sprintf(`INSERT INTO keyLimits(id, user_id, last_use, wait_time) VALUES (1, 1, '%v', 10);`, time.Now())
 
 func InsertKeyLimit(user_id int, wait_time int) string {
 	return fmt.Sprintf("INSERT INTO keyLimits(userID, last_use, wait_time) VALUES ('%v','%v','%v');", user_id, time.Now(), wait_time)
 }
 
-func GetKeyLimit(username string) string {
-	return fmt.Sprintf("SELECT keyLimits.last_use, keyLimits.wait_time FROM keyLimits INNER JOIN users ON keyLimit.user_id=users.id where users.username='%v';", username)
+func GetKeyLimit(user_id int) string {
+	return fmt.Sprintf("SELECT keyLimits.last_use, keyLimits.wait_time FROM keyLimits where user_id='%v';", user_id)
+}
+
+func CreateKeyForUser(username string) string {
+	return fmt.Sprintf("INSERT", username)
 }
