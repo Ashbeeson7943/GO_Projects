@@ -3,9 +3,10 @@ package main
 import (
 	"database/sql"
 	"log"
-	_ "modernc.org/sqlite"
 	"net/http"
 	"os"
+
+	_ "modernc.org/sqlite"
 )
 
 var mux *http.ServeMux
@@ -22,10 +23,10 @@ func main() {
 	mux.HandleFunc("POST /login", Login)
 	mux.HandleFunc("POST /register", Register)
 	//Protected Routes
-	mux.Handle("POST /add/", AuthenticationCheck(addFunc))
-	mux.Handle("POST /subtract/", AuthenticationCheck(subtractFunc))
-	mux.Handle("POST /multiply/", AuthenticationCheck(multiplyFunc))
-	mux.Handle("POST /divide/", AuthenticationCheck(divideFunc))
+	mux.Handle("POST /add/", AddMiddleware(addFunc, AuthenticationCheck, RateLimitCheck))
+	mux.Handle("POST /subtract/", AddMiddleware(subtractFunc, AuthenticationCheck, RateLimitCheck))
+	mux.Handle("POST /multiply/", AddMiddleware(multiplyFunc, AuthenticationCheck, RateLimitCheck))
+	mux.Handle("POST /divide/", AddMiddleware(divideFunc, AuthenticationCheck, RateLimitCheck))
 	server := &http.Server{
 		Addr:    ":8080",
 		Handler: mux,
@@ -50,4 +51,10 @@ func sqllite() {
 	if _, err := db.Exec(CreateUserTable); err != nil {
 		log.Fatal(err.Error())
 	}
+	log.Println("Adding test users...")
+	_, err = db.Exec(InsertTestUsers)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	log.Println("Test users added")
 }
